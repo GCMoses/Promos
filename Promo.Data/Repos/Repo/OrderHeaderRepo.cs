@@ -1,0 +1,42 @@
+﻿using Promo.Core.Models;
+using Promo.Data.AppData;
+using Promo.Data.Repos.IRepo;
+namespace Promo.Data.Repos.Repo;
+
+public class OrderHeaderRepo : GenericRepo<OrderHeader>, IOrderHeaderRepo
+{
+    private AppDbContext _db;
+
+    public OrderHeaderRepo(AppDbContext db) : base(db)
+    {
+        _db = db;
+    }
+
+
+    public void Update(OrderHeader obj)
+    {
+        _db.OrderHeaders.Update(obj);
+    }
+
+    public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
+    {
+        var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
+        if (orderFromDb != null)
+        {
+            orderFromDb.OrderStatus = orderStatus;
+            if (paymentStatus != null)
+            {
+                orderFromDb.PaymentStatus = paymentStatus;
+            }
+        }
+    }
+
+    public void UpdateStripePaymentID(int id, string sessionId, string paymentIntentId)
+    {
+        var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
+
+        orderFromDb.PaymentDate = DateTime.Now;
+        orderFromDb.SessionId = sessionId;
+        orderFromDb.PaymentIntentId = paymentIntentId;
+    }
+}
