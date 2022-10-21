@@ -61,7 +61,7 @@ public class DbInitializer : IDbInitializer
                 State = _config.GetSection("BongoMan:State").Get<string>(),
                 PostalCode = _config.GetSection("BongoMan:PostalCode").Get<string>(),
                 City = _config.GetSection("BongoMan:City").Get<string>()
-            }, "Kimberly1!").GetAwaiter().GetResult();
+            }, "BongoMan").GetAwaiter().GetResult();
 
             AppUser user = _db.AppUsers.FirstOrDefault(u => u.Email == _config.GetSection("BongoMan")["Email"]);
 
